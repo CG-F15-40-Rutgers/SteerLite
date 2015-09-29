@@ -14,6 +14,11 @@
 
 using namespace Util;
 
+bool compareCurvePoints(const CurvePoint& a, const CurvePoint& b) 
+{
+      return a.time < b.time;
+}
+
 Curve::Curve(const CurvePoint& startPoint, int curveType) : type(curveType)
 {
 	controlPoints.push_back(startPoint);
@@ -65,12 +70,25 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 // Sort controlPoints vector in ascending order: min-first
 void Curve::sortControlPoints()
 {
-	sort(controlPoints.begin(), controlPoints.end(), [](const CurvePoint a, const CurvePoint b) -> bool {
-		return a.time < b.time;
-	});
+	for (int i = 0; i < controlPoints.size(); i++)
+   {
+      std::cout  << controlPoints[i].time << ' ';
+   }
+   
+   std::cout << "\n";
 
-	return;
+   sort(controlPoints.begin(), controlPoints.end(), compareCurvePoints);
+        
+   for (int i = 0; i < controlPoints.size(); i++)
+   {
+      std::cout << controlPoints[i].time << ' ';
+   }
+
+   std::cout << "\n";
+
+   return;
 }
+
 
 // Calculate the position on curve corresponding to the given time, outputPoint is the resulting position
 bool Curve::calculatePoint(Point& outputPoint, float time)
