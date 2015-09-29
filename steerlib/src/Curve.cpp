@@ -104,7 +104,7 @@ bool Curve::calculatePoint(Point& outputPoint, float time)
 // Check Roboustness
 bool Curve::checkRobust()
 {
-	return (controlPoints.size() >= 2);
+	return (controlPoints.size() >= (type == catmullCurve)? 3 : 2);
 }
 
 // Find the current time interval (i.e. index of the next control point to follow according to current time)
