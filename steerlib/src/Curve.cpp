@@ -19,6 +19,8 @@ bool compareCurvePoints(const CurvePoint& a, const CurvePoint& b)
       return a.time < b.time;
 }
 
+
+
 Curve::Curve(const CurvePoint& startPoint, int curveType) : type(curveType)
 {
 	controlPoints.push_back(startPoint);
@@ -128,6 +130,7 @@ bool Curve::checkRobust()
 // Find the current time interval (i.e. index of the next control point to follow according to current time)
 bool Curve::findTimeInterval(unsigned int& nextPoint, float time)
 {
+   return ((time >= controlPoints[nextPoint - 1].time) && (time <= controlPoints[nextPoint].time));
 	//================DELETE THIS PART AND THEN START CODING===================
 	static bool flag = false;
 	if (!flag)
@@ -147,19 +150,23 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 	Point newPosition;
 	float normalTime, intervalTime;
 
-	//================DELETE THIS PART AND THEN START CODING===================
-	static bool flag = false;
-	if (!flag)
-	{
-		std::cerr << "ERROR>>>>Member function useHermiteCurve is not implemented!" << std::endl;
-		flag = true;
-	}
-	//=========================================================================
-
 
 	// Calculate time interval, and normal time required for later curve calculations
+   intervalTime = controlPoints[nextPoint].time - controlPoints[nextPoint - 1].time;
+   normalTime = time - controlPoints[nextPoint - 1].time;
 
 	// Calculate position at t = time on Hermite curve
+   Point a = ((-2*(controlPoints[nextPoint].position - controlPoints[nextPoint -1].position.vector()))/intervalTime) + (controlPoints[nextPoint - 1].tangent + controlPoints[nextPoint].tangent)/(pow(intervalTime,2));
+
+   Point b = (3*(controlPoints[nextPoint].position - controlPoints[nextPoint - 1].position.vector()))/((float) pow(intervalTime, 2)) - (2*controlPoints[nextPoint - 1].tangent + controlPoints[nextPoint].tangent)/intervalTime;
+
+   Vector c = controlPoints[nextPoint - 1].tangent;
+
+   Point d = controlPoints[nextPoint - 1].position;
+   
+   Point e = Point(c.x, c.y, c.z);
+
+   newPosition = (float)pow(normalTime, 3)*a + (float)pow(normalTime,2)*b + e*normalTime + d;
 
 	// Return result
 	return newPosition;
