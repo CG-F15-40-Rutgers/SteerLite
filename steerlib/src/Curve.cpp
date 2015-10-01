@@ -137,15 +137,13 @@ Point Curve::useHermiteCurve(const unsigned int nextPoint, const float time)
 
 	// Calculate position at t = time on Hermite curve
 	Vector a = ((-2 * (controlPoints[nextPoint + 1].position - controlPoints[nextPoint].position)) / pow(intervalTime, 3)) + ((controlPoints[nextPoint].tangent + controlPoints[nextPoint + 1].tangent) / pow(intervalTime, 2));
-	Vector b = ((3 * (controlPoints[nextPoint + 1].position - controlPoints[nextPoint].position)) / pow(intervalTime, 2)) + ((2 * controlPoints[nextPoint].tangent + controlPoints[nextPoint + 1].tangent) / intervalTime);
+	Vector b = ((3 * (controlPoints[nextPoint + 1].position - controlPoints[nextPoint].position)) / pow(intervalTime, 2)) - ((2 * controlPoints[nextPoint].tangent + controlPoints[nextPoint + 1].tangent) / intervalTime);
 	Vector c = controlPoints[nextPoint].tangent;
 	Vector d = controlPoints[nextPoint].position.vector();
 
 	Vector f = a * pow(normalTime, 3) + b * pow(normalTime, 2) + c * normalTime + d;
 	
-	newPosition.x = f.x;
-	newPosition.y = f.y;
-	newPosition.z = f.z;
+	newPosition = Point(f.x, f.y, f.z);
 
 	// Return result
 	return newPosition;
