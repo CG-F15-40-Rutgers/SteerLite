@@ -45,18 +45,20 @@ void Curve::drawCurve(Color curveColor, float curveThickness, int window)
 {
 #ifdef ENABLE_GUI
 
-	//================DELETE THIS PART AND THEN START CODING===================
-	static bool flag = false;
-	if (!flag)
-	{
-		std::cerr << "ERROR>>>>Member function drawCurve is not implemented!" << std::endl;
-		flag = true;
-	}
-	//=========================================================================
-
 	// Robustness: make sure there is at least two control point: start and end points
+	if (!checkRobust())
+		return;
 
 	// Move on the curve from t=0 to t=finalPoint, using window as step size, and linearly interpolate the curve points
+	for (int i = 0; i < controlPoints[controlPoints.size() - 1].time; i += window)
+	{
+		Point point1, point2;
+
+		calculatePoint(point1, i);
+		calculatePoint(point2, i + window);
+
+		DrawLib::drawLine(point1, point2, curveColor, curveThickness);
+	}
 
 	return;
 #endif
