@@ -69,15 +69,19 @@ bool compareCurvePoints(const CurvePoint& a, const CurvePoint& b)
 	return a.time < b.time;
 }
 
-// Sort controlPoints vector in ascending order: min-first
+bool checkDuplicateGoalTimes(const CurvePoint& a, const CurvePoint& b)
+{
+   return a.time == b.time;
+}
+
 void Curve::sortControlPoints()
 {
-	sort(controlPoints.begin(), controlPoints.end(), compareCurvePoints);
-	for (int i = 0; i < controlPoints.size(); i++)
-	{
-		std::cout << controlPoints[i].time << " ";
-	}
-	return;
+   sort(controlPoints.begin(), controlPoints.end(), compareCurvePoints);
+   //Get rid of controlPoints that have same goalTimes as an already existing controlPoint
+   std::vector<CurvePoint>::iterator i = unique(controlPoints.begin(), controlPoints.end(), checkDuplicateGoalTimes);
+   controlPoints.erase(i, controlPoints.end());
+
+   return;
 }
 
 // Calculate the position on curve corresponding to the given time, outputPoint is the resulting position
