@@ -98,6 +98,9 @@ namespace Util {
 
 		// Implement Catmull-Rom curve
 		Point useCatmullCurve(const unsigned int nextPoint, const float time);
+
+		// Calculate the slope for Catmull-Rom at index i
+		Vector calculateCatmullSlope(const unsigned int i);
 	};
 }
 
