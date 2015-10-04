@@ -14,6 +14,11 @@
 
 using namespace Util;
 
+bool compareCurvePoints(const CurvePoint& a, const CurvePoint& b) 
+{
+      return a.time < b.time;
+}
+
 Curve::Curve(const CurvePoint& startPoint, int curveType) : type(curveType)
 {
 	controlPoints.push_back(startPoint);
