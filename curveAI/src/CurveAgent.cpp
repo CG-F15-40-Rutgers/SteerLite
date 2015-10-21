@@ -170,7 +170,7 @@ void CurveAgent::draw()
 	}
 
 	// Draw curve path
-	curve.drawCurve(agentColor);
+	curve.drawCurve(agentColor,2,1);
 
 #endif
 }
