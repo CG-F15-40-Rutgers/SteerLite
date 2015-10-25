@@ -21,7 +21,7 @@ namespace SteerLib
     class STEERLIB_API GJK_EPA
     {
         public:
-			GJK_EPA(std::vector<Util::Vector>&, bool&);
+			GJK_EPA();
 
             /*
              *
@@ -129,8 +129,10 @@ namespace SteerLib
             static bool intersect(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
 
         private:
-			Util::Vector getFarthestPoint(std::vector<Util::Vector>&, Util::Vector&);
-			Util::Vector getSupport(std::vector<Util::Vector>&, std::vector<Util::Vector>&, Util::Vector&);
+			static Util::Vector getFarthestPoint(const std::vector<Util::Vector>&, Util::Vector&);
+			static Util::Vector getSupport(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, Util::Vector&);
+			static bool containsOrigin(std::vector<Util::Vector>&, Util::Vector&);
+			static void GJK(std::vector<Util::Vector>&, bool&, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
 
     }; // class GJK_EPA
 
