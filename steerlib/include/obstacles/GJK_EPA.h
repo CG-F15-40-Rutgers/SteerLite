@@ -130,9 +130,11 @@ namespace SteerLib
 
         private:
 			static Util::Vector getFarthestPoint(const std::vector<Util::Vector>&, Util::Vector&);
+			static void getClosestEdge(float&, Util::Vector&, int&, std::vector<Util::Vector>&);
 			static Util::Vector getSupport(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, Util::Vector&);
 			static bool containsOrigin(std::vector<Util::Vector>&, Util::Vector&);
 			static void GJK(std::vector<Util::Vector>&, bool&, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
+			static void EPA(float&, Util::Vector&, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::vector<Util::Vector>&);
 
     }; // class GJK_EPA
 

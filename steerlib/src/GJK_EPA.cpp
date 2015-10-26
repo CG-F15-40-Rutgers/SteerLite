@@ -32,6 +32,43 @@ Util::Vector SteerLib::GJK_EPA::getFarthestPoint(const std::vector<Util::Vector>
 	return farthestPoint;
 }
 
+// Gets closest edge of shape to origin
+// Sets distance to distance from origin to closest edge
+// Sets normal to normalized vector perpendicular to edge
+// Sets index of where to add a new point to the simplex
+void SteerLib::GJK_EPA::getClosestEdge(float& distance, Util::Vector& normal, int& index, std::vector<Util::Vector>& shape)
+{
+	distance = FLT_MAX;
+	normal = Util::Vector(0, 0, 0);
+	index = 0;
+
+	for (int i = 0; i < shape.size(); i++)
+	{
+		int j = i + 1 == shape.size() ? 0 : i + 1;
+
+		// Get points of the edge we're checking
+		Util::Vector a = shape[i], b = shape[j];
+
+		// Get the edge
+		Util::Vector ab = b - a;
+
+		// Get vector perpendicular to the edge and normalize it
+		Util::Vector abPerp = Util::Vector(-ab.z, ab.y, ab.x);
+		Util::Vector abPerpNorm = Util::normalize(abPerp);
+
+		// Calculate distance
+		float dot = abPerpNorm * a;
+
+		if (dot < distance)
+		{
+			// Update values if current edge is closer
+			distance = dot;
+			normal = abPerpNorm;
+			index = j;
+		}
+	}
+}
+
 // Returns farthest point in Minkowski Difference between shapeA and shapeB in direction d
 Util::Vector SteerLib::GJK_EPA::getSupport(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, Util::Vector& d)
 {
@@ -115,6 +152,7 @@ void SteerLib::GJK_EPA::GJK(std::vector<Util::Vector>& simplex, bool& is_collidi
 		Util::Vector a = getSupport(_shapeA, _shapeB, d);
 
 		float dot = a * d;
+
 		if (dot < 0)
 		{
 			// The new point doesn't pass the origin
@@ -136,6 +174,39 @@ void SteerLib::GJK_EPA::GJK(std::vector<Util::Vector>& simplex, bool& is_collidi
 	}
 }
 
+// Uses EPA to calculate penetration depth and MTV
+void SteerLib::GJK_EPA::EPA(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, std::vector<Util::Vector>& simplex)
+{
+	while (true)
+	{
+		float distance;
+		Util::Vector normal;
+		int index;
+
+		// Find closest edge of simplex to origin
+		getClosestEdge(distance, normal, index, simplex);
+
+		// Find farthest point in Minkowski Difference in direction normal to closest edge
+		Util::Vector s = getSupport(_shapeA, _shapeB, normal);
+
+		// Calculate distance of s along the normal
+		float dot = s * normal;
+
+		if (dot - distance < 0.0001)
+		{
+			// EPA has converged
+			return_penetration_depth = distance;
+			return_penetration_vector = normal;
+			break;
+		}
+		else
+		{
+			// Add new point to simplex and continue expanding
+			simplex.insert(simplex.begin() + index, s);
+		}
+	}
+}
+
 //Look at the GJK_EPA.h header file for documentation and instructions
 bool SteerLib::GJK_EPA::intersect(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB)
 {
@@ -146,8 +217,7 @@ bool SteerLib::GJK_EPA::intersect(float& return_penetration_depth, Util::Vector&
 
 	if (is_colliding)
 	{
-		//return_penetration_depth = ;
-		//return_penetration_vector = ;
+		EPA(return_penetration_depth, return_penetration_vector, _shapeA, _shapeB, simplex);
 		return true;
 	}
 	else
