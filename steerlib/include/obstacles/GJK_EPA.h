@@ -130,7 +130,6 @@ namespace SteerLib
 
         private:
 			static Util::Vector getFarthestPoint(const std::vector<Util::Vector>&, Util::Vector&);
-			static bool isPolyCW(std::vector<Util::Vector>&);
 			static void getClosestEdge(float&, Util::Vector&, int&, std::vector<Util::Vector>&);
 			static Util::Vector getSupport(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, Util::Vector&);
 			static bool containsOrigin(std::vector<Util::Vector>&, Util::Vector&);
