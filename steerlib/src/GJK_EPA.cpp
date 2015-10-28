@@ -32,6 +32,24 @@ Util::Vector SteerLib::GJK_EPA::getFarthestPoint(const std::vector<Util::Vector>
 	return farthestPoint;
 }
 
+// Returns true if winding direction of shape is clockwise, false if counterclockwise
+bool SteerLib::GJK_EPA::isPolyCW(std::vector<Util::Vector>& shape)
+{
+	float sum = 0;
+
+	for (int i = 0; i < shape.size(); i++)
+	{
+		int j = i + 1 == shape.size() ? 0 : i + 1;
+
+		Util::Vector a = shape[i], b = shape[j];
+
+		sum += (b.x - a.x) * (b.y + a.y);
+	}
+
+	// Sum is positive if CW, negative if CCW
+	return sum > 0;
+}
+
 // Gets closest edge of shape to origin
 // Sets distance to distance from origin to closest edge
 // Sets normal to normalized vector perpendicular to edge
