@@ -237,9 +237,61 @@ std::pair<float, Util::Point> minimum_distance(Util::Point l1, Util::Point l2, U
 
 Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 {
-    std::cerr<<"<<<calcProximityForce>>> Please Implement my body\n";
+    //std::cerr<<"<<<calcProximityForce>>> Please Implement my body\n";
 
-    return Util::Vector(0,0,0);
+	Util::Vector agent_repulsion_force = Util::Vector(0, 0, 0);
+	SteerLib::AgentInterface *tmp_agent;
+	SteerLib::ObstacleInterface *tmp_ob;
+	Util::Vector away = Util::Vector(0, 0, 0);
+	Util::Vector away_obs = Util::Vector(0, 0, 0);
+
+	std::set<SteerLib::SpatialDatabaseItemPtr> _neighbors;
+	gEngine->getSpatialDatabase()->getItemsInRange(_neighbors,
+		_position.x - (this->radius() + _SocialForcesParams.sf_query_radius),
+		_position.x + (this->radius() + _SocialForcesParams.sf_query_radius),
+		_position.z - (this->radius() + _SocialForcesParams.sf_query_radius),
+		_position.z + (this->radius() + _SocialForcesParams.sf_query_radius),
+		dynamic_cast<SteerLib::SpatialDatabaseItemPtr>(this)
+		);
+		
+	for (std::set<SteerLib::SpatialDatabaseItemPtr>::iterator neighbor = _neighbors.begin();neighbor != _neighbors.end(); neighbor++) {
+	
+		if ((*neighbor)->isAgent()) {
+			tmp_agent = dynamic_cast<SteerLib::AgentInterface *>(*neighbor);
+
+			//direction away
+			Util::Vector away_tmp = normalize(position() - tmp_agent->position());
+
+			//summing it with other away forces
+			away = away + (
+				away_tmp * (
+					_SocialForcesParams.sf_agent_a * exp(
+							((this->radius()-tmp_agent->radius()) - (this->position()-tmp_agent->position()).length())/_SocialForcesParams.sf_agent_b
+					)
+					) * dt //might not need? wasn't sure if code was cut off in slides
+				);
+		}
+		else {
+			Util::Vector wall_normal = calcWallNormal(tmp_ob);
+			std::pair<Util::Point, Util::Point> line = calcWallPointsFromNormal(tmp_ob, wall_normal);
+			std::pair<float, Util::Point> min_stuff = minimum_distance(line.first, line.second, position());
+			Util::Vector away_obs_tmp = normalize(position() - min_stuff.second);
+
+			away_obs = away_obs + (
+				away_obs_tmp * (
+					_SocialForcesParams.sf_wall_a * exp(
+						((this->radius()) - (this->position() - min_stuff.second).length()) / _SocialForcesParams.sf_wall_b
+						)
+					) * dt
+				);
+		
+		}
+	}
+
+
+										
+
+	return away + away_obs;
 }
 
 
