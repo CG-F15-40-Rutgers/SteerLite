@@ -343,7 +343,7 @@ Util::Vector SocialForcesAgent::calcAgentRepulsionForce(float dt)
        }
     }
     
-    return agent_repulsion_force;rn Util::Vector(0,0,0);
+    return agent_repulsion_force;
 }
 
 
