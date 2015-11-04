@@ -11,6 +11,7 @@ SteerLib::GJK_EPA::GJK_EPA()
 {
 }
 
+<<<<<<< HEAD
 // Returns farthest point in shape in direction d
 Util::Vector SteerLib::GJK_EPA::getFarthestPoint(const std::vector<Util::Vector>& shape, Util::Vector& d)
 {
@@ -221,6 +222,13 @@ void SteerLib::GJK_EPA::EPA(float& return_penetration_depth, Util::Vector& retur
 		{
 			// Add new point to simplex and continue expanding
 			simplex.insert(simplex.begin() + index, s);
+=======
+std::vector<Util::Vector> minkowskiDiff(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB) {
+	std::vector<Util::Vector> diffPoints = std::vector<Util::Vector>();
+	for each(Util::Vector v in _shapeA) {
+		for each(Util::Vector w in _shapeB) {
+			diffPoints.push_back(v - w);
+>>>>>>> 949fec23f31fce777ce8959ae26d39e26ccab71a
 		}
 	}
 }

@@ -127,6 +127,7 @@ namespace SteerLib
              *  DO NOT MODIFY polygon1.xml
              */
             static bool intersect(float& return_penetration_depth, Util::Vector& return_penetration_vector, const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
+			std::vector<Util::Vector> minkowskiDiff(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB);
 
         private:
 			static Util::Vector getFarthestPoint(const std::vector<Util::Vector>&, Util::Vector&);
