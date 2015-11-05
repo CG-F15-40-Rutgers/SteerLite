@@ -666,11 +666,15 @@ void SocialForcesAgent::updateAI(float timeStamp, float dt, unsigned int frameNu
      */
 	Util::Vector proximityForce = calcProximityForce(dt);
 
+   Util::Vector slidingForce = calcSlidingForce(dt);
+
+
 // #define _DEBUG_ 1
 #ifdef _DEBUG_
 	std::cout << "agent" << id() << " repulsion force " << repulsionForce << std::endl;
 	std::cout << "agent" << id() << " proximity force " << proximityForce << std::endl;
 	std::cout << "agent" << id() << " pref force " << prefForce << std::endl;
+	std::cout << "agent" << id() << " sliding force " << slidingForce << std::endl;
 #endif
 	// _velocity = _newVelocity;
 	int alpha=1;
@@ -679,7 +683,7 @@ void SocialForcesAgent::updateAI(float timeStamp, float dt, unsigned int frameNu
 		alpha=0;
 	}
 
-	Util::Vector acceleration = (prefForce + repulsionForce + proximityForce) / AGENT_MASS;
+	Util::Vector acceleration = (prefForce + repulsionForce + proximityForce + slidingForce) / AGENT_MASS;
 	_velocity = velocity() + acceleration * dt;
 	_velocity = clamp(velocity(), _SocialForcesParams.sf_max_speed);
 	_velocity.y=0.0f;
