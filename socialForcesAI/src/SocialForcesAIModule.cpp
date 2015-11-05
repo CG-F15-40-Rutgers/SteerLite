@@ -80,7 +80,7 @@ void SocialForcesAIModule::init( const SteerLib::OptionDictionary & options, Ste
 
 	gUseDynamicPhaseScheduling = false;
 	gShowStats = false;
-	logStats = false;
+	logStats = true;
 	gShowAllStats = false;
 	logFilename = "sfAI.log";
 

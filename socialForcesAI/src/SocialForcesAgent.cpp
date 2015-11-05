@@ -271,7 +271,9 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 				);
 		}
 		else {
-			Util::Vector wall_normal = calcWallNormal(tmp_ob);
+			tmp_ob = dynamic_cast<SteerLib::ObstacleInterface *>(*neighbor);
+         
+         Util::Vector wall_normal = calcWallNormal(tmp_ob);
 			std::pair<Util::Point, Util::Point> line = calcWallPointsFromNormal(tmp_ob, wall_normal);
 			std::pair<float, Util::Point> min_stuff = minimum_distance(line.first, line.second, position());
 			Util::Vector away_obs_tmp = normalize(position() - min_stuff.second);
@@ -400,8 +402,6 @@ Util::Vector SocialForcesAgent::calcSlidingForce(float dt)
 
 Util::Vector SocialForcesAgent::calcWallRepulsionForce(float dt)
 {
-    std::cerr<<"<<<calcWallRepulsionForce>>> Please Implement my body\n";
-
 	Util::Vector wall_repulsion_force = Util::Vector(0, 0, 0); 
 	SteerLib::ObstacleInterface * tmp_ob; 
 
