@@ -239,7 +239,6 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 {
     //std::cerr<<"<<<calcProximityForce>>> Please Implement my body\n";
 
-	Util::Vector agent_repulsion_force = Util::Vector(0, 0, 0);
 	SteerLib::AgentInterface *tmp_agent;
 	SteerLib::ObstacleInterface *tmp_ob;
 	Util::Vector away = Util::Vector(0, 0, 0);
@@ -287,9 +286,6 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 		
 		}
 	}
-
-
-										
 
 	return away + away_obs;
 }
@@ -346,6 +342,63 @@ Util::Vector SocialForcesAgent::calcAgentRepulsionForce(float dt)
     return agent_repulsion_force;
 }
 
+Util::Vector SocialForcesAgent::calcSlidingForce(float dt)
+{
+	SteerLib::AgentInterface *tmp_agent;
+	SteerLib::ObstacleInterface *tmp_ob;
+	Util::Vector slide = Util::Vector(0, 0, 0);
+	Util::Vector slide_obs = Util::Vector(0, 0, 0);
+
+   std::set<SteerLib::SpatialDatabaseItemPtr> _neighbors;
+   gSpatialDatabase->getItemsInRange(_neighbors,
+          _position.x - (this->_radius + _SocialForcesParams.sf_query_radius),
+          _position.x + (this->_radius + _SocialForcesParams.sf_query_radius),
+          _position.z - (this->_radius + _SocialForcesParams.sf_query_radius),
+          _position.z + (this->_radius + _SocialForcesParams.sf_query_radius),
+          (this));
+   
+	for (std::set<SteerLib::SpatialDatabaseItemPtr>::iterator neighbor = _neighbors.begin();neighbor != _neighbors.end(); neighbor++)
+   {
+      if ((*neighbor)->isAgent())
+      {
+         tmp_agent = dynamic_cast<SteerLib::AgentInterface *>(*neighbor);
+         
+         if (( id() != tmp_agent->id() ) && (tmp_agent->computePenetration(this->position(), this->radius()) > 0.000001))
+         {
+            Util::Vector tan = rightSideInXZPlane( normalize (position() - tmp_agent->position()));
+             
+            slide = slide + 
+               (  tmp_agent->computePenetration(this->position(), this->radius()) 
+                  * _SocialForcesParams.sf_sliding_friction_force
+                  * tan
+                  * ((tmp_agent->velocity() * tan) - (this->velocity() * tan))
+               );
+         }
+      }
+      else
+      {
+         tmp_ob = dynamic_cast<SteerLib::ObstacleInterface *>(*neighbor);
+
+         if ( tmp_ob->computePenetration(this->position(), this->radius()) > .000001)
+         {
+            Util::Vector wall_normal = calcWallNormal(tmp_ob);
+            std::pair<Util::Point,Util::Point> line = calcWallPointsFromNormal(tmp_ob, wall_normal);
+
+            std::pair<float, Util::Point> min_stuff = minimum_distance(line.first, line.second, this->position());
+
+            
+            slide_obs = slide_obs -
+               (  _SocialForcesParams.sf_sliding_friction_force
+                  * (min_stuff.first + this->radius())
+                  * (this->velocity() * rightSideInXZPlane( wall_normal))
+                  * wall_normal                  
+               );
+         }
+
+      }
+      return slide_obs + slide;
+   }
+}
 
 Util::Vector SocialForcesAgent::calcWallRepulsionForce(float dt)
 {
