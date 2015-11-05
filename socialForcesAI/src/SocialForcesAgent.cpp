@@ -400,7 +400,6 @@ Util::Vector SocialForcesAgent::calcSlidingForce(float dt)
 
 Util::Vector SocialForcesAgent::calcWallRepulsionForce(float dt)
 {
-    std::cerr<<"<<<calcWallRepulsionForce>>> Please Implement my body\n";
 
 	Util::Vector wall_repulsion_force = Util::Vector(0, 0, 0); 
 	SteerLib::ObstacleInterface * tmp_ob; 
