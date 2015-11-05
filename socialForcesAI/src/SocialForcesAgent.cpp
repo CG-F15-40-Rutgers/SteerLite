@@ -335,7 +335,7 @@ Util::Vector SocialForcesAgent::calcAgentRepulsionForce(float dt)
        
        if (( id() != tmp_agent->id() ) && (tmp_agent->computePenetration(this->position(), this->radius()) > 0.000001))
        {
-          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * normalize(position() - tmp_agent->position()));
+          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * dt) * normalize(position() - tmp_agent->position());
        }
     }
     
@@ -372,6 +372,7 @@ Util::Vector SocialForcesAgent::calcSlidingForce(float dt)
                   * _SocialForcesParams.sf_sliding_friction_force
                   * tan
                   * ((tmp_agent->velocity() * tan) - (this->velocity() * tan))
+                  * dt
                );
          }
       }
@@ -392,6 +393,7 @@ Util::Vector SocialForcesAgent::calcSlidingForce(float dt)
                   * (min_stuff.first + this->radius())
                   * (this->velocity() * rightSideInXZPlane( wall_normal))
                   * wall_normal                  
+                  * dt
                );
          }
 
