@@ -265,9 +265,9 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 			away = away + (
 				away_tmp * (
 					_SocialForcesParams.sf_agent_a * exp(
-							((this->radius()-tmp_agent->radius()) - (this->position()-tmp_agent->position()).length())/_SocialForcesParams.sf_agent_b
+							((this->radius()+tmp_agent->radius()) - (this->position()-tmp_agent->position()).length())/_SocialForcesParams.sf_agent_b
 					)
-					) * dt //might not need? wasn't sure if code was cut off in slides
+					)
 				);
 		}
 		else {
@@ -335,7 +335,7 @@ Util::Vector SocialForcesAgent::calcAgentRepulsionForce(float dt)
        
        if (( id() != tmp_agent->id() ) && (tmp_agent->computePenetration(this->position(), this->radius()) > 0.000001))
        {
-          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * dt) * normalize(position() - tmp_agent->position());
+          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * normalize(position() - tmp_agent->position()));
        }
     }
     
