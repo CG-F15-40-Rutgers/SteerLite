@@ -265,9 +265,9 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 			away = away + (
 				away_tmp * (
 					_SocialForcesParams.sf_agent_a * exp(
-							((this->radius()-tmp_agent->radius()) - (this->position()-tmp_agent->position()).length())/_SocialForcesParams.sf_agent_b
+							((this->radius()+tmp_agent->radius()) - (this->position()-tmp_agent->position()).length())/_SocialForcesParams.sf_agent_b
 					)
-					) * dt //might not need? wasn't sure if code was cut off in slides
+					)
 				);
 		}
 		else {
@@ -295,7 +295,7 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 
 Vector SocialForcesAgent::calcGoalForce(Vector _goalDirection, float _dt)
 {
-	return AGENT_MASS * (((_prefVelocity.length() * _goalDirection) - _velocity) / _dt);
+	return AGENT_MASS * (((PREFERED_SPEED * _goalDirection) - _velocity) / _dt);
 }
 
 
@@ -335,7 +335,7 @@ Util::Vector SocialForcesAgent::calcAgentRepulsionForce(float dt)
        
        if (( id() != tmp_agent->id() ) && (tmp_agent->computePenetration(this->position(), this->radius()) > 0.000001))
        {
-          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * dt) * normalize(position() - tmp_agent->position());
+          agent_repulsion_force = agent_repulsion_force + ( tmp_agent->computePenetration(this->position(), this->radius()) * _SocialForcesParams.sf_agent_body_force * normalize(position() - tmp_agent->position()));
        }
     }
     
@@ -672,7 +672,7 @@ void SocialForcesAgent::updateAI(float timeStamp, float dt, unsigned int frameNu
    Util::Vector slidingForce = calcSlidingForce(dt);
 
 
-#define _DEBUG_ 1
+//#define _DEBUG_ 1
 #ifdef _DEBUG_
 	std::cout << "agent" << id() << " repulsion force " << repulsionForce << std::endl;
 	std::cout << "agent" << id() << " proximity force " << proximityForce << std::endl;
@@ -687,7 +687,7 @@ void SocialForcesAgent::updateAI(float timeStamp, float dt, unsigned int frameNu
 	}
 
 	Util::Vector acceleration = (prefForce + repulsionForce + proximityForce + slidingForce) / AGENT_MASS;
-	std::cout << "agent" << id() << " accel " << acceleration << std::endl;
+	//std::cout << "agent" << id() << " accel " << acceleration << std::endl;
 	_velocity = velocity() + acceleration * dt;
 	_velocity = clamp(velocity(), _SocialForcesParams.sf_max_speed);
 	_velocity.y=0.0f;
