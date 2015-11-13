@@ -72,7 +72,8 @@ void SteerLib::GJK_EPA::getClosestEdge(float& distance, Util::Vector& normal, in
 // Returns farthest point in Minkowski Difference between shapeA and shapeB in direction d
 Util::Vector SteerLib::GJK_EPA::getSupport(const std::vector<Util::Vector>& _shapeA, const std::vector<Util::Vector>& _shapeB, Util::Vector& d)
 {
-	return getFarthestPoint(_shapeA, d) - getFarthestPoint(_shapeB, -d);
+   Util::Vector nd = -d;
+   return getFarthestPoint(_shapeA, d) - getFarthestPoint(_shapeB, nd);
 }
 
 // Returns true if simplex contains the origin
