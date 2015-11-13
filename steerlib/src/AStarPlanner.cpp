@@ -73,9 +73,102 @@ namespace SteerLib
 	{
 		gSpatialDatabase = _gSpatialDatabase;
 
-		//TODO
-		std::cout<<"\nIn A*";
+		//TODO		
+		std::set<AStarPlannerNode*, nodePtrComp> closedset, openset;
+		std::map<int, AStarPlannerNode> nodes;
+
+		int startIndex = gSpatialDatabase->getCellIndexFromLocation(start);
+		int goalIndex = gSpatialDatabase->getCellIndexFromLocation(goal);
+
+		nodes[startIndex] = AStarPlannerNode(getPointFromGridIndex(startIndex), 0.0, heuristic_cost_estimate(start, goal), NULL);
+		openset.insert(&nodes[startIndex]);
+
+		nodes[goalIndex] = AStarPlannerNode(getPointFromGridIndex(goalIndex), DBL_MAX, DBL_MAX, NULL);
+
+		while (!openset.empty())
+		{
+			AStarPlannerNode *current = *openset.begin();
+
+			// Reached goal
+			if (*current == nodes[goalIndex])
+			{
+				AStarPlannerNode *curr = current;
+				agent_path.clear();
+
+				// Reconstruct path
+				while (curr != NULL)
+				{
+					agent_path.insert(agent_path.begin(), curr->point);
+					curr = curr->parent;
+				}
+
+				return true;
+			}
+
+			// Move current from openset to closedset
+			openset.erase(openset.begin());
+			closedset.insert(current);
+
+			// Loop through neighbors
+			unsigned int x, z;
+			gSpatialDatabase->getGridCoordinatesFromIndex(gSpatialDatabase->getCellIndexFromLocation(current->point), x, z);
+			int x_range_min, x_range_max, z_range_min, z_range_max;
+
+			x_range_min = MAX(x - GRID_STEP, 0);
+			x_range_max = MIN(x + GRID_STEP, gSpatialDatabase->getNumCellsX());
+
+			z_range_min = MAX(z - GRID_STEP, 0);
+			z_range_max = MIN(z + GRID_STEP, gSpatialDatabase->getNumCellsZ());
+
+			for (int i = x_range_min; i <= x_range_max; i += GRID_STEP)
+			{
+				for (int j = z_range_min; j <= z_range_max; j += GRID_STEP)
+				{
+					int neighborIndex = gSpatialDatabase->getCellIndexFromGridCoords(i, j);
+					Util::Point neighborPoint = getPointFromGridIndex(neighborIndex);
+
+					if (current->point == neighborPoint)
+						continue;
+
+					// Continue if neighbor is in closedset
+					if (nodes.find(neighborIndex) != nodes.end())
+					{
+						if (closedset.find(&nodes[neighborIndex]) != closedset.end())
+							continue;
+					}
+
+					if (canBeTraversed(neighborIndex))
+					{
+						double tentative_g_score = current->g + Util::distanceBetween(current->point, neighborPoint);
+
+						if (nodes.find(neighborIndex) == nodes.end())
+						{
+							nodes[neighborIndex] = AStarPlannerNode(neighborPoint, DBL_MAX, DBL_MAX, NULL);
+						}
+
+						AStarPlannerNode *neighbor = &nodes[neighborIndex];
+
+						if (tentative_g_score < neighbor->g)
+						{
+							neighbor->parent = current;
+							neighbor->g = tentative_g_score;
+							neighbor->f = neighbor->g + heuristic_cost_estimate(neighborPoint, goal);
+							if (openset.find(neighbor) == openset.end())
+							{
+								openset.insert(neighbor);
+							}
+						}
+					}
+
+				}
+			}
+		}
 
 		return false;
+	}
+
+	double AStarPlanner::heuristic_cost_estimate(Util::Point start, Util::Point goal)
+	{
+		return Util::distanceBetween(start, goal);
 	}
 }
