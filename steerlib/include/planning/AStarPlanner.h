@@ -106,10 +106,6 @@ namespace SteerLib
 		private:
 			SteerLib::GridDatabase2D * gSpatialDatabase;
 			double heuristic_cost_estimate(Util::Point, Util::Point);
-			struct nodePtrComp
-			{
-				bool operator()(const AStarPlannerNode *a, const AStarPlannerNode *b) const { return *a < *b; }
-			};
 	};
 
 
