@@ -283,7 +283,7 @@ Util::Vector SocialForcesAgent::calcProximityForce(float dt)
 					_SocialForcesParams.sf_wall_a * exp(
 						((this->radius()) - (this->position() - min_stuff.second).length()) / _SocialForcesParams.sf_wall_b
 						)
-					) * dt
+					)
 				);
 
 		}
