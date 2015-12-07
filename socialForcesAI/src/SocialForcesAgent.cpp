@@ -749,13 +749,15 @@ bool SocialForcesAgent::runLongTermPlanning()
 	// run the main a-star search here
 	std::vector<Util::Point> agentPath;
 	Util::Point pos = position();
-	
+
+	aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
+	/*
 	if (!gSpatialDatabase->findPath(pos, _goalQueue.front().targetLocation,
 		agentPath, (unsigned int)50000))
 	{
 		return false;
 	}
-	
+	*/
 	for (int i = 1; i < agentPath.size(); i++)
 	{
 		_midTermPath.push_back(agentPath.at(i));
@@ -784,13 +786,14 @@ bool SocialForcesAgent::runLongTermPlanning2()
 	{
 		// std::cout << "agent" << this->id() << " is running planning again" << std::endl;
 	}
-	
+	aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
+	/*
 	if (!gSpatialDatabase->findSmoothPath(pos, _goalQueue.front().targetLocation,
 		agentPath, (unsigned int)50000))
 	{
 		return false;
 	}
-	
+	*/
 	// Push path into _waypoints
 
 	// Skip first node that is at location of agent
