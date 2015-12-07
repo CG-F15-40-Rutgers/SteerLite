@@ -128,6 +128,7 @@ private:
 	// holds the location of the best local target along the midtermpath
 	Util::Point _currentLocalTarget;
 
+	std::string testcase;
 	SteerLib::AStarPlanner aStar;
 
 	friend class SocialForcesAIModule;

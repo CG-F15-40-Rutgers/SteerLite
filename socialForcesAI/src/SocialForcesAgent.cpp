@@ -159,6 +159,8 @@ void SocialForcesAgent::reset(const SteerLib::AgentInitialConditions & initialCo
 		}
 	}
 
+	testcase = (*engineInfo->getModuleOptions("testCasePlayer").find("testcase")).second;
+
 	runLongTermPlanning();
 
 	// std::cout << "first waypoint: " << _waypoints.front() << " agents position: " << position() << std::endl;
@@ -750,14 +752,20 @@ bool SocialForcesAgent::runLongTermPlanning()
 	std::vector<Util::Point> agentPath;
 	Util::Point pos = position();
 
-	aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
-	/*
-	if (!gSpatialDatabase->findPath(pos, _goalQueue.front().targetLocation,
-		agentPath, (unsigned int)50000))
+	if (testcase == "office-complex" || testcase == "maze")
 	{
-		return false;
+		aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
 	}
-	*/
+	else
+	{
+
+		if (!gSpatialDatabase->findPath(pos, _goalQueue.front().targetLocation,
+			agentPath, (unsigned int)50000))
+		{
+			return false;
+		}
+	}
+
 	for (int i = 1; i < agentPath.size(); i++)
 	{
 		_midTermPath.push_back(agentPath.at(i));
@@ -786,14 +794,18 @@ bool SocialForcesAgent::runLongTermPlanning2()
 	{
 		// std::cout << "agent" << this->id() << " is running planning again" << std::endl;
 	}
-	aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
-	/*
-	if (!gSpatialDatabase->findSmoothPath(pos, _goalQueue.front().targetLocation,
-		agentPath, (unsigned int)50000))
+	if (testcase == "office-complex" || testcase == "maze")
 	{
-		return false;
+		aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
 	}
-	*/
+	else
+	{
+		if (!gSpatialDatabase->findSmoothPath(pos, _goalQueue.front().targetLocation,
+			agentPath, (unsigned int)50000))
+		{
+			return false;
+		}
+	}
 	// Push path into _waypoints
 
 	// Skip first node that is at location of agent
