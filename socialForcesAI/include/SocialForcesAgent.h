@@ -130,6 +130,7 @@ private:
 
 	std::string testcase;
 	SteerLib::AStarPlanner aStar;
+	bool useAStar();
 
 	friend class SocialForcesAIModule;
 

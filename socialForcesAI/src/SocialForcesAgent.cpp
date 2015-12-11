@@ -722,6 +722,21 @@ void SocialForcesAgent::updateMidTermPath()
 
 
 /**
+* Determines whether to use A* for the current testcase
+*/
+bool SocialForcesAgent::useAStar()
+{
+	if (testcase == "office-complex" || testcase == "maze" || testcase == "plane_egress" || testcase == "plane_ingress") {
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+/**
 * Update the local target to the furthest point on the midterm path the agent can see.
 */
 void SocialForcesAgent::updateLocalTarget()
@@ -753,7 +768,7 @@ bool SocialForcesAgent::runLongTermPlanning()
 	std::vector<Util::Point> agentPath;
 	Util::Point pos = position();
 
-	if (testcase == "office-complex" || testcase == "maze")
+	if (useAStar())
 	{
 		aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
 	}
@@ -795,7 +810,7 @@ bool SocialForcesAgent::runLongTermPlanning2()
 	{
 		// std::cout << "agent" << this->id() << " is running planning again" << std::endl;
 	}
-	if (testcase == "office-complex" || testcase == "maze")
+	if (useAStar())
 	{
 		aStar.computePath(agentPath, pos, _goalQueue.front().targetLocation, gSpatialDatabase, true);
 	}
@@ -863,7 +878,7 @@ void SocialForcesAgent::draw()
 	if (_goalQueue.front().goalType == SteerLib::GOAL_TYPE_SEEK_STATIC_TARGET) {
 		Util::DrawLib::drawFlag(_goalQueue.front().targetLocation);
 	}
-
+}
 #ifdef DRAW_COLLISIONS
 	std::set<SteerLib::SpatialDatabaseItemPtr> _neighbors;
 	gSpatialDatabase->getItemsInRange(_neighbors, _position.x - (this->_radius * 3), _position.x + (this->_radius * 3),
