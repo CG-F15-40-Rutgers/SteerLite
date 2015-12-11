@@ -39,13 +39,12 @@
     <fovy>45</fovy>
   </suggestedCameraView>
   
-  
   <circleObstacle>
-  <radius>7</radius>
+  <radius>9</radius>
   <height>18</height>
   <position><x>11</x> <y>0</y> <z>-40</z></position>
-  
   </circleObstacle>
+
 
   <orientedBoxObstacle> 
   <thetaY>0</thetaY>

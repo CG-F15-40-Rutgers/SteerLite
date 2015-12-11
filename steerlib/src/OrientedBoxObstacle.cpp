@@ -123,7 +123,7 @@ void OrientedBoxObstacle::draw() {
 	DrawLib::drawLine(botLefth, botRighth);
 	DrawLib::drawLine(botRighth, topRighth);
 
-	DrawLib::glColor(gDarkCyan);
+	DrawLib::glColor(gGray30);
 	// upper plane
 	DrawLib::drawQuad(botLefth, botRighth, topRighth, topLefth);
 	// top/bot sides

@@ -34,9 +34,9 @@ CircleObstacle::CircleObstacle ( Point centerPosition, float radius, float ymin,
 void CircleObstacle::draw() {
 #ifdef ENABLE_GUI
 
-	DrawLib::glColor(gDarkCyan);
+	DrawLib::glColor(gDarkRed);
 	DrawLib::drawCylinder(_centerPosition,_radius,_bounds.ymin,_bounds.ymax);
-	DrawLib::glColor(gBlack);
-	DrawLib::drawBoxWireFrame(_bounds.xmin,_bounds.xmax,_bounds.ymin,_bounds.ymax,_bounds.zmin,_bounds.zmax);
+	//DrawLib::glColor(gDarkBlue);
+	//DrawLib::drawBoxWireFrame(_bounds.xmin,_bounds.xmax,_bounds.ymin,_bounds.ymax,_bounds.zmin,_bounds.zmax);
 #endif // ifdef ENABLE_GUI
 }
