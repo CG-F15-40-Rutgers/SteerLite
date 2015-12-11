@@ -249,7 +249,7 @@ void DrawLib::drawAgentDisc(const Point & pos, const Vector & dir, float radius,
 	glPushMatrix();
 	{
 		float rad = atan2(dir.z, dir.x)*(-M_180_OVER_PI);
-		glColor(color);
+		glColor(gYellow);
 		glTranslate(pos);
 		glRotatef(rad,0.0f,1.0f,0.0f);
 		glScalef(radius, radius*4.0f, radius);
@@ -284,7 +284,7 @@ void DrawLib::drawAgentDisc(const Point & pos, float radius, const Color& color)
 {
 	glPushMatrix();
 	{
-		glColor(color);
+		glColor(gDarkMagenta);
 		glTranslate(pos);
 		glScalef(radius, radius*4.0f, radius);
 

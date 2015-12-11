@@ -40,3 +40,4 @@ void CircleObstacle::draw() {
 	//DrawLib::drawBoxWireFrame(_bounds.xmin,_bounds.xmax,_bounds.ymin,_bounds.ymax,_bounds.zmin,_bounds.zmax);
 #endif // ifdef ENABLE_GUI
 }
+					
