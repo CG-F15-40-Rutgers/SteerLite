@@ -140,8 +140,8 @@ namespace SteerLib
 				AStarPlannerNode *curr = current;
 				agent_path.clear();
 
-				std::cout << "\n\nPath length: " << curr->g << "\n";
-				std::cout << "Number of expanded nodes: " << closedset.size() << "\n\n";
+				//std::cout << "\n\nPath length: " << curr->g << "\n";
+				//std::cout << "Number of expanded nodes: " << closedset.size() << "\n\n";
 
 				// Reconstruct path
 				while (curr != NULL)
