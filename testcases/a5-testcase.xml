@@ -109,10 +109,10 @@
   <orientedBoxObstacle> 
   <thetaY>0</thetaY>
   <size>
-    <x>7</x> <y>25</y> <z>6</z>
+    <x>7</x> <y>25</y> <z>7</z>
   </size>
   <position>
-    <x>23</x> <y>0</y> <z>-26</z>
+    <x>23</x> <y>0</y> <z>-28</z>
   </position>
   </orientedBoxObstacle>
 
