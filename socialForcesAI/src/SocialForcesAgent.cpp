@@ -727,6 +727,9 @@ void SocialForcesAgent::updateMidTermPath()
 bool SocialForcesAgent::useAStar()
 {
 	if (testcase == "office-complex" || testcase == "maze" || testcase == "plane_egress" || testcase == "plane_ingress") {
+		if (testcase == "maze")
+			aStar.setObstacleClearance(1);
+
 		return true;
 	}
 	else

@@ -18,7 +18,6 @@
 
 #define COLLISION_COST  1000
 #define GRID_STEP  1
-#define OBSTACLE_CLEARANCE 0
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
@@ -45,7 +44,7 @@
 
 namespace SteerLib
 {
-	AStarPlanner::AStarPlanner(){}
+	AStarPlanner::AStarPlanner() { OBSTACLE_CLEARANCE = 0; }
 
 	AStarPlanner::~AStarPlanner(){}
 
@@ -69,6 +68,11 @@ namespace SteerLib
 			}
 		}
 	};
+
+	void AStarPlanner::setObstacleClearance(int val)
+	{
+		OBSTACLE_CLEARANCE = val;
+	}
 
 	bool AStarPlanner::canBeTraversed ( int id ) 
 	{
