@@ -19,7 +19,7 @@
 
   
  <suggestedCameraView>
-    <position> <x>40</x> <y>100</y> <z>-30</z> </position>
+    <position> <x>10</x> <y>100</y> <z>-30</z> </position>
     <lookat> <x>0</x> <y>0</y> <z>-20</z> </lookat>
     <up> <x>0</x> <y>1</y> <z>0</z> </up>
     <fovy>45</fovy>
@@ -42,7 +42,7 @@
   <circleObstacle>
   <radius>9</radius>
   <height>18</height>
-  <position><x>11</x> <y>0</y> <z>-40</z></position>
+  <position><x>11</x> <y>0</y> <z>-42</z></position>
   </circleObstacle>
 
 
@@ -158,7 +158,7 @@
     </initialConditions>
     <goalSequence>
       <seekStaticTarget>
-        <targetLocation> <x>10</x> <y>0</y> <z>-31</z> </targetLocation>
+        <targetLocation> <x>10</x> <y>0</y> <z>-33</z> </targetLocation>
         <desiredSpeed>5.0</desiredSpeed>
         <timeDuration>1000.0</timeDuration>
       </seekStaticTarget>
@@ -183,7 +183,7 @@
     </initialConditions>
     <goalSequence>
       <seekStaticTarget>
-        <targetLocation> <x>10</x> <y>0</y> <z>-31</z> </targetLocation>
+        <targetLocation> <x>10</x> <y>0</y> <z>-33</z> </targetLocation>
         <desiredSpeed>5.0</desiredSpeed>
         <timeDuration>1000.0</timeDuration>
       </seekStaticTarget>
@@ -201,7 +201,7 @@
     </initialConditions>
     <goalSequence>
       <seekStaticTarget>
-        <targetLocation> <x>10</x> <y>0</y> <z>-31</z> </targetLocation>
+        <targetLocation> <x>10</x> <y>0</y> <z>-33</z> </targetLocation>
         <desiredSpeed>2.3</desiredSpeed>
         <timeDuration>1000.0</timeDuration>
       </seekStaticTarget>
